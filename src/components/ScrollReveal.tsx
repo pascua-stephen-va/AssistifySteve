@@ -1,30 +1,47 @@
 import React from 'react';
-import { motion, useReducedMotion } from 'motion/react';
+import { motion, useReducedMotion } from 'framer-motion';
 
 interface ScrollRevealProps {
   children: React.ReactNode;
   className?: string;
   delay?: number;
   yOffset?: number;
+  duration?: number;
+  amount?: number | 'some' | 'all';
 }
 
+/**
+ * Reusable Framer Motion scroll-into-view wrapper providing a subtle,
+ * GPU-composited slide-up and fade reveal while respecting prefers-reduced-motion.
+ */
 export const ScrollReveal: React.FC<ScrollRevealProps> = ({
   children,
-  className = '',
+  className,
   delay = 0,
   yOffset = 28,
+  duration = 0.65,
+  amount = 0.12,
 }) => {
-  const shouldReduceMotion = useReducedMotion();
+  const prefersReducedMotion = useReducedMotion();
+
+  if (prefersReducedMotion) {
+    return (
+      <div data-testid="scroll-reveal" className={className}>
+        {children}
+      </div>
+    );
+  }
 
   return (
     <motion.div
-      initial={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: yOffset }}
+      data-testid="scroll-reveal"
+      initial={{ opacity: 0, y: yOffset }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-60px' }}
+      viewport={{ once: true, amount }}
       transition={{
-        duration: shouldReduceMotion ? 0.01 : 0.65,
-        delay: shouldReduceMotion ? 0 : delay,
-        ease: [0.2, 0.0, 0, 1.0], // Google Material 3 Expressive emphasized deceleration curve
+        duration,
+        delay,
+        ease: [0.22, 1, 0.36, 1],
       }}
       className={className}
     >

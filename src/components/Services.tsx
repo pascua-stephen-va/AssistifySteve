@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
 import { Terminal, Briefcase, HeartHandshake, Check, ChevronRight, Zap } from 'lucide-react';
 import { SERVICES_DATA } from '../data/portfolioData.ts';
+import { ScrollReveal } from './ScrollReveal.tsx';
 
 export const Services: React.FC = () => {
   const [selectedService, setSelectedService] = useState<string | null>(null);
@@ -27,16 +27,10 @@ export const Services: React.FC = () => {
   };
 
   return (
-    <section id="services" className="bg-bg py-16 md:py-24 scroll-mt-20">
+    <section id="services" className="bg-bg py-16 md:py-24 scroll-mt-[78px] md:scroll-mt-[88px]">
       <div className="max-w-[1200px] mx-auto px-6 md:px-10 lg:px-16">
         {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, ease: [0.25, 0.1, 0.25, 1] }}
-          viewport={{ once: true, margin: '-80px' }}
-          className="mb-12"
-        >
+        <ScrollReveal className="mb-12">
           <div className="flex items-center gap-3 mb-4">
             <span className="w-8 h-px bg-stroke" aria-hidden="true" />
             <span className="text-xs text-muted uppercase tracking-[0.3em]">
@@ -49,16 +43,20 @@ export const Services: React.FC = () => {
           <p className="text-sm md:text-base text-muted max-w-xl">
             A cohesive triad of technical IT systems, disciplined executive administration, and empathetic client retention systems.
           </p>
-        </motion.div>
+        </ScrollReveal>
 
         {/* 3 Service Pillars Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
           {SERVICES_DATA.map((service, index) => {
             const isExpanded = selectedService === service.id;
             return (
-              <div
+              <ScrollReveal
                 key={service.id}
-                className="group relative rounded-3xl bg-surface/60 hover:bg-surface border border-stroke p-6 sm:p-8 flex flex-col justify-between transition-colors duration-300"
+                delay={0.08 * index}
+                className="h-full"
+              >
+              <div
+                className="h-full group relative rounded-3xl bg-surface/60 hover:bg-surface border border-stroke p-6 sm:p-8 flex flex-col justify-between transition-colors duration-300"
               >
                 <div>
                   {/* Top Index + Icon */}
@@ -133,6 +131,7 @@ export const Services: React.FC = () => {
                   </button>
                 </div>
               </div>
+              </ScrollReveal>
             );
           })}
         </div>

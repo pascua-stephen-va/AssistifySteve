@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import { LoadingScreen } from './components/LoadingScreen.tsx';
@@ -16,7 +16,6 @@ import { WorkArchivePage } from './components/WorkArchivePage.tsx';
 import { ScrollToTopButton } from './components/ScrollToTopButton.tsx';
 import { MagneticCursor } from './components/MagneticCursor.tsx';
 import { ReadingProgressBar } from './components/ReadingProgressBar.tsx';
-import { StickySectionHeader } from './components/StickySectionHeader.tsx';
 import { SectionDivider } from './components/SectionDivider.tsx';
 import { CommandPalette } from './components/CommandPalette.tsx';
 
@@ -26,33 +25,41 @@ function shouldSkipLoadingInitially(): boolean {
   return params.get('autostart') === '1';
 }
 
-const LandingPage: React.FC = () => (
-  <motion.div
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-    exit={{ opacity: 0 }}
-    transition={{ duration: 0.35 }}
-  >
-    <ReadingProgressBar />
-    <StickySectionHeader />
-    <Hero />
-    <FeaturedWork />
-    <SectionDivider variant="wave" />
-    <Services />
-    <SectionDivider variant="step" />
-    <Explorations />
-    <SectionDivider variant="node" />
-    <About />
-    <SectionDivider variant="wave" />
-    <ToolsGrid />
-    <SectionDivider variant="step" />
-    <Recommender />
-    <SectionDivider variant="node" />
-    <Stats />
-    <SectionDivider variant="wave" />
-    <Contact />
-  </motion.div>
-);
+const LandingPage: React.FC = () => {
+  useEffect(() => {
+    document.documentElement.classList.add('portfolio-snap-enabled');
+    return () => {
+      document.documentElement.classList.remove('portfolio-snap-enabled');
+    };
+  }, []);
+
+  return (
+    <motion.div
+      data-snap-container="true"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.35 }}
+    >
+      <Hero />
+      <FeaturedWork />
+      <SectionDivider variant="wave" />
+      <Services />
+      <SectionDivider variant="step" />
+      <Explorations />
+      <SectionDivider variant="node" />
+      <About />
+      <SectionDivider variant="wave" />
+      <ToolsGrid />
+      <SectionDivider variant="step" />
+      <Recommender />
+      <SectionDivider variant="node" />
+      <Stats />
+      <SectionDivider variant="wave" />
+      <Contact />
+    </motion.div>
+  );
+};
 
 export default function App() {
   const [isLoading, setIsLoading] = useState<boolean>(() => !shouldSkipLoadingInitially());
@@ -78,6 +85,7 @@ export default function App() {
       </AnimatePresence>
 
       <Header onOpenCommandPalette={openCommandPalette} />
+      <ReadingProgressBar />
 
       <main id="main-content" className="flex-1">
         <AnimatePresence mode="wait">

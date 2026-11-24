@@ -39,6 +39,16 @@
     color-scheme: dark;
   }
 
+  html.portfolio-snap-enabled {
+    scroll-snap-type: y proximity;
+  }
+
+  [data-snap-container="true"] > section,
+  [data-snap-container="true"] > footer {
+    scroll-snap-align: start;
+    scroll-snap-stop: normal;
+  }
+
   body {
     font-family: var(--font-body);
     background-color: hsl(var(--bg));
@@ -118,6 +128,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html.portfolio-snap-enabled {
+    scroll-snap-type: none;
+  }
+
   .animate-scroll-down,
   .animate-role-fade-in,
   .animate-gradient-shift,

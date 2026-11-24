@@ -8,7 +8,7 @@ const HERO_ROLES: { article: string; label: string }[] = [
   { article: 'A', label: 'VA Mentor' },
   { article: 'An', label: 'Automator' },
 ];
-const HERO_VIDEO_URL = 'https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/e71aea27-a808-4ae3-8231-a469d49285d4.mp4';
+const HERO_VIDEO_URL = '/assets/aistudio/motionsites-background-1ed54127_db250406.mp4';
 
 export const Hero: React.FC = () => {
   const [roleIndex, setRoleIndex] = useState(0);

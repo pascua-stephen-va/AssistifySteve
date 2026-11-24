@@ -92,7 +92,8 @@ export function resolveStickySectionState(
   scrollY: number,
   viewportHeight: number,
   sections: PortfolioSectionMeta[] = PORTFOLIO_SECTIONS,
-  showThresholdPx = 280
+  showThresholdPx = 280,
+  isAtPageBottom = false
 ): StickySectionState {
   const safeViewport = Math.max(1, viewportHeight);
   const triggerLine = safeViewport * 0.35;
@@ -106,12 +107,18 @@ export function resolveStickySectionState(
     }
   }
 
+  if (isAtPageBottom && sections.length > 0 && rects.length > 0) {
+    activeIndex = sections.length - 1;
+  }
+
   const activeSection = sections[activeIndex] ?? sections[0];
   const activeRect = rectById.get(activeSection.id);
 
   // Calculate reading progress within the active section
   let sectionProgress = 0;
-  if (activeRect && activeRect.height > 0) {
+  if (isAtPageBottom) {
+    sectionProgress = 1;
+  } else if (activeRect && activeRect.height > 0) {
     const travelled = triggerLine - activeRect.top;
     sectionProgress = clampProgress(travelled / activeRect.height);
   }

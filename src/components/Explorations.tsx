@@ -5,6 +5,7 @@ import { ArrowUpRight, X } from 'lucide-react';
 import { EXPLORATION_ITEMS, VISUAL_GALLERY_IMAGES } from '../data/visualAssets.ts';
 import { ExplorationItem } from '../types/index.ts';
 import { BRAND_DATA } from '../data/portfolioData.ts';
+import { ScrollReveal } from './ScrollReveal.tsx';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -88,7 +89,7 @@ export const Explorations: React.FC = () => {
         ref={contentRef}
         className="relative z-10 h-screen flex flex-col items-center justify-center text-center px-6 pointer-events-none"
       >
-        <div className="pointer-events-auto max-w-xl mx-auto">
+        <ScrollReveal className="pointer-events-auto max-w-xl mx-auto">
           <p className="text-xs text-muted uppercase tracking-[0.3em] mb-4">
             Explorations
           </p>
@@ -113,7 +114,7 @@ export const Explorations: React.FC = () => {
               <ArrowUpRight className="w-4 h-4" />
             </span>
           </a>
-        </div>
+        </ScrollReveal>
       </div>
 
       {/* Layer 2: Parallax Columns */}

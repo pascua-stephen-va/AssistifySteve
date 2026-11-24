@@ -1,10 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
+import { motion, useReducedMotion, Variants } from 'framer-motion';
 import { Mail, Phone, ArrowUpRight, Copy, Check } from 'lucide-react';
 import { BRAND_DATA } from '../data/portfolioData.ts';
 import { HlsBackgroundVideo } from './HlsBackgroundVideo.tsx';
+import { ScrollReveal } from './ScrollReveal.tsx';
 
-const FOOTER_VIDEO_URL = 'https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/e71aea27-a808-4ae3-8231-a469d49285d4.mp4';
+const FOOTER_VIDEO_URL = '/assets/aistudio/motionsites-background-1ed54127_db250406.mp4';
 
 const INQUIRY_TOPICS = [
   'Executive VA & Operations',
@@ -13,12 +15,40 @@ const INQUIRY_TOPICS = [
   'Custom Workflow Automation',
 ];
 
+const FORM_CONTAINER_VARIANTS: Variants = {
+  hidden: { opacity: 0, y: 18 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.45,
+      ease: [0.22, 1, 0.36, 1],
+      delayChildren: 0.12,
+      staggerChildren: 0.09,
+    },
+  },
+};
+
+const FORM_FIELD_VARIANTS: Variants = {
+  hidden: { opacity: 0, x: -24, y: 10 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    y: 0,
+    transition: {
+      duration: 0.48,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
+};
+
 export const Contact: React.FC = () => {
   const [copied, setCopied] = useState(false);
   const [inquiryTopic, setInquiryTopic] = useState('Executive VA & Operations');
   const [clientName, setClientName] = useState('');
   const [clientMessage, setClientMessage] = useState('');
   const marqueeRef = useRef<HTMLDivElement | null>(null);
+  const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -68,7 +98,7 @@ export const Contact: React.FC = () => {
   return (
     <footer
       id="contact"
-      className="relative bg-bg pt-16 md:pt-20 pb-8 md:pb-12 overflow-hidden scroll-mt-20"
+      className="relative bg-bg pt-16 md:pt-20 pb-8 md:pb-12 overflow-hidden scroll-mt-[78px] md:scroll-mt-[88px]"
     >
       {/* Flipped Background Video */}
       <HlsBackgroundVideo
@@ -93,7 +123,7 @@ export const Contact: React.FC = () => {
       {/* Main Contact Content */}
       <div className="relative z-10 max-w-[1200px] mx-auto px-6 md:px-10 lg:px-16">
         {/* Top CTA Headline & Direct Email */}
-        <div className="text-center max-w-2xl mx-auto mb-14">
+        <ScrollReveal className="text-center max-w-2xl mx-auto mb-14">
           <p className="text-xs text-muted uppercase tracking-[0.3em] mb-4">
             Get in touch
           </p>
@@ -114,12 +144,12 @@ export const Contact: React.FC = () => {
               <span aria-hidden="true">↗</span>
             </span>
           </a>
-        </div>
+        </ScrollReveal>
 
         {/* Interactive Contact Grid (All Original Channels & Inquiry Composer Preserved) */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start mb-16">
           {/* Left Column: Direct Channels */}
-          <div className="lg:col-span-5 space-y-4">
+          <ScrollReveal delay={0.08} className="lg:col-span-5 space-y-4">
             <div className="rounded-3xl bg-surface/90 backdrop-blur-md border border-stroke p-6">
               <h3 className="font-display italic text-2xl text-text-primary mb-1">
                 Direct Action Channels
@@ -226,22 +256,39 @@ export const Contact: React.FC = () => {
                 </a>
               </div>
             </div>
-          </div>
+          </ScrollReveal>
 
-          {/* Right Column: Interactive Inquiry Composer */}
+          {/* Right Column: Interactive Inquiry Composer with Staggered Field Entry */}
           <div className="lg:col-span-7">
-            <div className="rounded-3xl bg-surface/90 backdrop-blur-md border border-stroke p-6 sm:p-8">
-              <div className="pb-4 border-b border-stroke mb-6">
+            <motion.div
+              data-testid="contact-form-card"
+              variants={FORM_CONTAINER_VARIANTS}
+              initial={prefersReducedMotion ? false : 'hidden'}
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.15 }}
+              className="rounded-3xl bg-surface/90 backdrop-blur-md border border-stroke p-6 sm:p-8 overflow-hidden"
+            >
+              <motion.div
+                data-testid="contact-form-field"
+                data-field-index="0"
+                variants={FORM_FIELD_VARIANTS}
+                className="pb-4 border-b border-stroke mb-6"
+              >
                 <h3 className="font-display italic text-2xl text-text-primary">
                   Send a Pre-Formatted Brief
                 </h3>
                 <p className="text-xs text-muted mt-1">
                   Select your focus scope and launch directly in Email, WhatsApp, or Viber.
                 </p>
-              </div>
+              </motion.div>
 
               {/* Scope Selection Tabs */}
-              <div className="mb-5">
+              <motion.div
+                data-testid="contact-form-field"
+                data-field-index="1"
+                variants={FORM_FIELD_VARIANTS}
+                className="mb-5"
+              >
                 <span className="block text-[11px] uppercase tracking-[0.2em] text-muted mb-2.5">
                   1. Focus Scope
                 </span>
@@ -266,9 +313,14 @@ export const Contact: React.FC = () => {
                     );
                   })}
                 </div>
-              </div>
+              </motion.div>
 
-              <div className="mb-4">
+              <motion.div
+                data-testid="contact-form-field"
+                data-field-index="2"
+                variants={FORM_FIELD_VARIANTS}
+                className="mb-4"
+              >
                 <label
                   htmlFor="client-name-input"
                   className="block text-[11px] uppercase tracking-[0.2em] text-muted mb-1.5"
@@ -283,9 +335,14 @@ export const Contact: React.FC = () => {
                   placeholder="e.g. Alex Morgan / Acme Ventures"
                   className="w-full px-4 py-2.5 rounded-xl text-sm text-text-primary bg-bg border border-stroke focus:border-brand-blue outline-none placeholder:text-muted/60"
                 />
-              </div>
+              </motion.div>
 
-              <div className="mb-6">
+              <motion.div
+                data-testid="contact-form-field"
+                data-field-index="3"
+                variants={FORM_FIELD_VARIANTS}
+                className="mb-6"
+              >
                 <label
                   htmlFor="client-message-input"
                   className="block text-[11px] uppercase tracking-[0.2em] text-muted mb-1.5"
@@ -300,10 +357,15 @@ export const Contact: React.FC = () => {
                   placeholder="Tell Steve about your timezone, weekly support hours needed, software stack, or timeline..."
                   className="w-full px-4 py-3 rounded-xl text-sm text-text-primary bg-bg border border-stroke focus:border-brand-blue outline-none resize-none placeholder:text-muted/60"
                 />
-              </div>
+              </motion.div>
 
               {/* Launch Actions */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <motion.div
+                data-testid="contact-form-field"
+                data-field-index="4"
+                variants={FORM_FIELD_VARIANTS}
+                className="grid grid-cols-1 sm:grid-cols-3 gap-3"
+              >
                 <a
                   href={emailHref}
                   className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-full bg-text-primary text-bg hover:opacity-90 text-xs sm:text-sm font-medium transition-opacity whitespace-nowrap"
@@ -339,8 +401,8 @@ export const Contact: React.FC = () => {
                   />
                   <span>Chat on Viber</span>
                 </a>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
           </div>
         </div>
 

@@ -1,7 +1,7 @@
 {
   "name": "Remix AssistifySteve Portfolio",
   "description": "Production-grade portfolio for AssistifySteve, IT \u0026 Administrative Virtual Assistant and TESDA Level III Certified Coach. Simplify. Organize. Automate. Assistified.",
-  "requestFramePermissions": ["microphone"],
+  "requestFramePermissions": [],
   "majorCapabilities": [
     "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
   ]

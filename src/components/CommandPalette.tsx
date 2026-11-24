@@ -13,8 +13,6 @@ import {
   Layers,
   Mail,
   MessageSquare,
-  Mic,
-  MicOff,
   Search,
   Sparkles,
   User,
@@ -29,13 +27,6 @@ import {
   getNextCommandIndex,
   groupCommandItems,
 } from '../utils/commandPalette.ts';
-import {
-  BrowserSpeechRecognition,
-  VOICE_COMMAND_EXAMPLES,
-  formatVoiceErrorMessage,
-  getSpeechRecognitionConstructor,
-  matchVoiceCommand,
-} from '../utils/voiceCommands.ts';
 
 interface CommandPaletteProps {
   isOpen: boolean;
@@ -74,32 +65,18 @@ function getItemIcon(id: string) {
   }
 }
 
-type VoiceStatus = 'idle' | 'listening' | 'matched' | 'error' | 'unsupported';
-
 export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onOpen, onClose }) => {
   const [query, setQuery] = useState('');
   const [activeIndex, setActiveIndex] = useState(0);
   const [copiedNotice, setCopiedNotice] = useState(false);
-  const [voiceStatus, setVoiceStatus] = useState<VoiceStatus>('idle');
-  const [voiceTranscript, setVoiceTranscript] = useState('');
-  const [voiceMessage, setVoiceMessage] = useState('');
 
   const inputRef = useRef<HTMLInputElement | null>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
   const itemRefs = useRef<Record<string, HTMLButtonElement | null>>({});
-  const recognitionRef = useRef<BrowserSpeechRecognition | null>(null);
-  const autoExecuteTimerRef = useRef<number | null>(null);
-  const latestInterimRef = useRef<string>('');
-  const handledFinalResultRef = useRef<boolean>(false);
-  const voiceStatusRef = useRef<VoiceStatus>('idle');
 
   const location = useLocation();
   const navigate = useNavigate();
   const prefersReducedMotion = useReducedMotion();
-
-  useEffect(() => {
-    voiceStatusRef.current = voiceStatus;
-  }, [voiceStatus]);
 
   const filteredItems = useMemo(
     () => filterCommandItems(COMMAND_PALETTE_ITEMS, query),
@@ -139,40 +116,6 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onOpen, 
     return () => window.removeEventListener('keydown', handleGlobalKeyDown);
   }, [isOpen, onOpen, onClose]);
 
-  const stopVoiceRecognition = useCallback((resetState = false) => {
-    if (autoExecuteTimerRef.current !== null) {
-      window.clearTimeout(autoExecuteTimerRef.current);
-      autoExecuteTimerRef.current = null;
-    }
-
-    const activeRecognition = recognitionRef.current;
-    if (activeRecognition) {
-      recognitionRef.current = null;
-      try {
-        activeRecognition.onstart = null;
-        activeRecognition.onresult = null;
-        activeRecognition.onerror = null;
-        activeRecognition.onend = null;
-        activeRecognition.abort();
-      } catch {
-        // Ignore abort errors from already-ended sessions
-      }
-    }
-
-    if (resetState) {
-      setVoiceStatus('idle');
-      setVoiceTranscript('');
-      setVoiceMessage('');
-    }
-  }, []);
-
-  // Cleanup any active speech recognition on unmount
-  useEffect(() => {
-    return () => {
-      stopVoiceRecognition(false);
-    };
-  }, [stopVoiceRecognition]);
-
   // Reset search state, lock body scroll, and manage focus on open/close
   useEffect(() => {
     if (isOpen) {
@@ -181,7 +124,6 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onOpen, 
       setQuery('');
       setActiveIndex(0);
       setCopiedNotice(false);
-      stopVoiceRecognition(true);
 
       const prevOverflow = document.body.style.overflow;
       document.body.style.overflow = 'hidden';
@@ -196,13 +138,11 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onOpen, 
       };
     }
 
-    stopVoiceRecognition(true);
-
     if (previousFocusRef.current) {
       previousFocusRef.current.focus();
       previousFocusRef.current = null;
     }
-  }, [isOpen, stopVoiceRecognition]);
+  }, [isOpen]);
 
   // Keep activeIndex in bounds when filtered list changes
   useEffect(() => {
@@ -273,152 +213,6 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onOpen, 
     [location.pathname, navigate, onClose]
   );
 
-  const processSpokenTranscript = useCallback(
-    (spokenText: string) => {
-      const trimmed = spokenText.trim();
-      if (!trimmed) {
-        setVoiceStatus('error');
-        setVoiceMessage('No speech detected. Tap the mic and try "Go to contact" or "Show tools".');
-        return;
-      }
-
-      const match = matchVoiceCommand(trimmed, COMMAND_PALETTE_ITEMS);
-      setVoiceTranscript(trimmed);
-
-      if (match.item) {
-        const targetItem = match.item;
-        setVoiceStatus('matched');
-        setVoiceMessage(
-          targetItem.group === 'Quick Actions'
-            ? `Running ${targetItem.label}`
-            : `Navigating to ${targetItem.label}`
-        );
-        setQuery(targetItem.label);
-
-        if (autoExecuteTimerRef.current !== null) {
-          window.clearTimeout(autoExecuteTimerRef.current);
-        }
-        autoExecuteTimerRef.current = window.setTimeout(() => {
-          autoExecuteTimerRef.current = null;
-          executeItem(targetItem);
-        }, 420);
-        return;
-      }
-
-      setVoiceStatus('error');
-      setQuery(match.cleanedQuery || trimmed);
-      setVoiceMessage(
-        `No command matched "${trimmed}". Try saying "Go to contact" or "Show tools".`
-      );
-    },
-    [executeItem]
-  );
-
-  const handleToggleVoice = useCallback(() => {
-    if (voiceStatus === 'listening') {
-      stopVoiceRecognition(true);
-      inputRef.current?.focus();
-      return;
-    }
-
-    stopVoiceRecognition(false);
-
-    const SpeechRecognitionCtor = getSpeechRecognitionConstructor();
-    if (!SpeechRecognitionCtor) {
-      setVoiceStatus('unsupported');
-      setVoiceTranscript('');
-      setVoiceMessage(
-        'Voice recognition is not supported in this browser. Try Chrome, Edge, or Safari, or type a command above.'
-      );
-      return;
-    }
-
-    latestInterimRef.current = '';
-    handledFinalResultRef.current = false;
-
-    try {
-      const recognition = new SpeechRecognitionCtor();
-      recognition.lang = 'en-US';
-      recognition.continuous = false;
-      recognition.interimResults = true;
-      recognition.maxAlternatives = 1;
-
-      recognition.onstart = () => {
-        setVoiceStatus('listening');
-        setVoiceTranscript('');
-        setVoiceMessage('Listening... try "Go to contact" or "Show tools"');
-      };
-
-      recognition.onresult = (event) => {
-        let interim = '';
-        let finalText = '';
-
-        for (let i = event.resultIndex; i < event.results.length; i += 1) {
-          const result = event.results[i];
-          const text = result?.[0]?.transcript ?? '';
-          if (result?.isFinal) {
-            finalText += text;
-          } else {
-            interim += text;
-          }
-        }
-
-        if (interim.trim()) {
-          latestInterimRef.current = interim.trim();
-          setVoiceTranscript(interim.trim());
-        }
-
-        if (finalText.trim()) {
-          handledFinalResultRef.current = true;
-          latestInterimRef.current = finalText.trim();
-          recognitionRef.current = null;
-          try {
-            recognition.stop();
-          } catch {
-            // Ignore stop errors if already stopping
-          }
-          processSpokenTranscript(finalText.trim());
-        }
-      };
-
-      recognition.onerror = (event) => {
-        recognitionRef.current = null;
-        handledFinalResultRef.current = true;
-        const friendlyMessage = formatVoiceErrorMessage(event.error);
-        if (!friendlyMessage) {
-          setVoiceStatus('idle');
-          setVoiceMessage('');
-          return;
-        }
-        setVoiceStatus('error');
-        setVoiceMessage(friendlyMessage);
-      };
-
-      recognition.onend = () => {
-        recognitionRef.current = null;
-        if (!handledFinalResultRef.current) {
-          if (latestInterimRef.current) {
-            handledFinalResultRef.current = true;
-            processSpokenTranscript(latestInterimRef.current);
-          } else if (voiceStatusRef.current === 'listening') {
-            setVoiceStatus('idle');
-            setVoiceMessage('');
-          }
-        }
-      };
-
-      recognitionRef.current = recognition;
-      setVoiceStatus('listening');
-      setVoiceTranscript('');
-      setVoiceMessage('Listening... try "Go to contact" or "Show tools"');
-      recognition.start();
-    } catch {
-      recognitionRef.current = null;
-      setVoiceStatus('error');
-      setVoiceMessage('Could not start voice recognition. Check microphone permissions and try again.');
-    }
-  }, [voiceStatus, stopVoiceRecognition, processSpokenTranscript]);
-
   const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'ArrowDown') {
       e.preventDefault();
@@ -437,7 +231,6 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onOpen, 
     }
   };
 
-  const isListening = voiceStatus === 'listening';
   let runningIndex = -1;
 
   return (
@@ -471,15 +264,9 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onOpen, 
                 ref={inputRef}
                 type="text"
                 value={query}
-                onChange={(e) => {
-                  setQuery(e.target.value);
-                  if (voiceStatus === 'error' || voiceStatus === 'unsupported') {
-                    setVoiceStatus('idle');
-                    setVoiceMessage('');
-                  }
-                }}
+                onChange={(e) => setQuery(e.target.value)}
                 onKeyDown={handleInputKeyDown}
-                placeholder='Jump to a section or tap the mic ("Go to contact")...'
+                placeholder="Jump to a section, work archive, or quick action..."
                 aria-label="Search portfolio sections and actions"
                 aria-controls="command-palette-listbox"
                 aria-activedescendant={
@@ -506,40 +293,6 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onOpen, 
               )}
               <button
                 type="button"
-                data-testid="command-palette-voice-btn"
-                onClick={handleToggleVoice}
-                aria-pressed={isListening}
-                aria-label={isListening ? 'Stop voice recognition' : 'Start voice command'}
-                title={
-                  isListening
-                    ? 'Stop listening'
-                    : 'Voice command — say "Go to contact" or "Show tools"'
-                }
-                className={`relative w-8 h-8 rounded-lg border flex items-center justify-center shrink-0 transition-colors ${
-                  isListening
-                    ? 'bg-brand-blue/25 border-brand-blue/65 text-brand-light'
-                    : voiceStatus === 'matched'
-                      ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-300'
-                      : 'bg-bg border-stroke text-muted hover:text-text-primary hover:border-brand-blue/50'
-                }`}
-              >
-                {isListening && !prefersReducedMotion && (
-                  <motion.span
-                    aria-hidden="true"
-                    className="absolute inset-0 rounded-lg border border-brand-blue/70"
-                    initial={{ opacity: 0.7, scale: 1 }}
-                    animate={{ opacity: 0, scale: 1.32 }}
-                    transition={{ duration: 1.1, repeat: Infinity, ease: 'easeOut' }}
-                  />
-                )}
-                {voiceStatus === 'unsupported' ? (
-                  <MicOff className="w-3.5 h-3.5 relative z-10" aria-hidden="true" />
-                ) : (
-                  <Mic className="w-3.5 h-3.5 relative z-10" aria-hidden="true" />
-                )}
-              </button>
-              <button
-                type="button"
                 onClick={onClose}
                 aria-label="Close command palette"
                 className="hidden sm:inline-flex items-center px-1.5 py-0.5 rounded border border-stroke bg-bg text-[10px] font-mono uppercase tracking-wider text-muted hover:text-text-primary transition-colors shrink-0"
@@ -547,92 +300,6 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onOpen, 
                 ESC
               </button>
             </div>
-
-            {/* Voice Recognition Live Status Strip */}
-            <AnimatePresence initial={false}>
-              {voiceStatus !== 'idle' && (
-                <motion.div
-                  data-testid="command-palette-voice-status"
-                  data-voice-status={voiceStatus}
-                  role="status"
-                  aria-live="polite"
-                  initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, height: 0 }}
-                  transition={{ duration: prefersReducedMotion ? 0 : 0.18, ease: 'easeOut' }}
-                  className="shrink-0 overflow-hidden border-b border-stroke bg-bg/85"
-                >
-                  <div className="px-4 py-2.5 flex items-center justify-between gap-3">
-                    <div className="flex items-center gap-2.5 min-w-0">
-                      {isListening && (
-                        <div
-                          className="flex items-end gap-[2px] h-3.5 shrink-0"
-                          aria-hidden="true"
-                        >
-                          {[0.4, 1, 0.65, 0.9].map((peak, barIdx) => (
-                            <motion.span
-                              key={barIdx}
-                              className="w-[2px] rounded-full bg-brand-blue origin-bottom"
-                              style={{ height: '14px' }}
-                              animate={
-                                prefersReducedMotion
-                                  ? { scaleY: peak }
-                                  : { scaleY: [0.3, peak, 0.4, Math.min(1, peak + 0.15), 0.3] }
-                              }
-                              transition={{
-                                duration: 0.9 + barIdx * 0.12,
-                                repeat: Infinity,
-                                ease: 'easeInOut',
-                              }}
-                            />
-                          ))}
-                        </div>
-                      )}
-                      {voiceStatus === 'matched' && (
-                        <Check className="w-3.5 h-3.5 text-emerald-400 shrink-0" aria-hidden="true" />
-                      )}
-                      {(voiceStatus === 'error' || voiceStatus === 'unsupported') && (
-                        <MicOff className="w-3.5 h-3.5 text-muted shrink-0" aria-hidden="true" />
-                      )}
-
-                      <div className="min-w-0">
-                        <p className="text-xs text-text-primary truncate">
-                          {isListening && voiceTranscript
-                            ? `"${voiceTranscript}"`
-                            : voiceStatus === 'matched' && voiceTranscript
-                              ? `"${voiceTranscript}" — ${voiceMessage}`
-                              : voiceMessage}
-                        </p>
-                        {isListening && !voiceTranscript && (
-                          <p className="text-[11px] text-muted truncate mt-0.5">
-                            Say: {VOICE_COMMAND_EXAMPLES.map((ex) => `"${ex}"`).join(' · ')}
-                          </p>
-                        )}
-                      </div>
-                    </div>
-
-                    {isListening ? (
-                      <button
-                        type="button"
-                        onClick={() => stopVoiceRecognition(true)}
-                        className="text-[11px] font-mono text-brand-light hover:text-text-primary px-2 py-0.5 rounded border border-brand-blue/35 bg-brand-blue/15 shrink-0 transition-colors"
-                      >
-                        Stop
-                      </button>
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={() => stopVoiceRecognition(true)}
-                        aria-label="Dismiss voice status"
-                        className="p-1 rounded text-muted hover:text-text-primary transition-colors shrink-0"
-                      >
-                        <X className="w-3 h-3" aria-hidden="true" />
-                      </button>
-                    )}
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
 
             {/* Results List */}
             <div
@@ -738,10 +405,6 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onOpen, 
                     ↵
                   </kbd>
                   Select
-                </span>
-                <span className="hidden sm:inline-flex items-center gap-1">
-                  <Mic className="w-3 h-3 text-brand-blue" aria-hidden="true" />
-                  Voice ready
                 </span>
               </div>
               <span className="inline-flex items-center gap-1">

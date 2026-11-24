@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
 import { ArrowRight, RefreshCw, Shield, Sparkles, Layers, Wrench } from 'lucide-react';
 import { analyzeWorkflowNeeds } from '../utils/recommender.ts';
 import { RecommendationResult } from '../types/index.ts';
+import { ScrollReveal } from './ScrollReveal.tsx';
 
 const SAMPLE_PROMPTS = [
   'Inbox overload and scheduling conflicts',
@@ -51,16 +51,10 @@ export const Recommender: React.FC = () => {
   };
 
   return (
-    <section id="recommend" className="bg-bg py-16 md:py-24 scroll-mt-20">
+    <section id="recommend" className="bg-bg py-16 md:py-24 scroll-mt-[78px] md:scroll-mt-[88px]">
       <div className="max-w-[1200px] mx-auto px-6 md:px-10 lg:px-16">
         {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, ease: [0.25, 0.1, 0.25, 1] }}
-          viewport={{ once: true, margin: '-80px' }}
-          className="mb-12"
-        >
+        <ScrollReveal className="mb-12">
           <div className="flex items-center gap-3 mb-4">
             <span className="w-8 h-px bg-stroke" aria-hidden="true" />
             <span className="text-xs text-muted uppercase tracking-[0.3em]">
@@ -73,9 +67,10 @@ export const Recommender: React.FC = () => {
           <p className="text-sm md:text-base text-muted max-w-xl">
             Describe your current operational bottlenecks or IT hurdles. The client-side engine matches the optimal service tier, tool stack, and execution roadmap.
           </p>
-        </motion.div>
+        </ScrollReveal>
 
         {/* Intake Card */}
+        <ScrollReveal delay={0.1}>
         <div className="rounded-3xl bg-surface border border-stroke p-6 sm:p-8 md:p-10 mb-10">
           <label
             htmlFor="workflow-prompt-input"
@@ -145,6 +140,7 @@ export const Recommender: React.FC = () => {
             </button>
           </div>
         </div>
+        </ScrollReveal>
 
         {/* Recommendation Blueprint Card */}
         {recommendation && (

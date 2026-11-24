@@ -1,21 +1,15 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 import { Award, Terminal, BookOpen, ArrowRight } from 'lucide-react';
 import { BRAND_DATA } from '../data/portfolioData.ts';
+import { ScrollReveal } from './ScrollReveal.tsx';
 
 export const About: React.FC = () => {
   return (
-    <section id="about" className="bg-bg py-16 md:py-24 scroll-mt-20">
+    <section id="about" className="bg-bg py-16 md:py-24 scroll-mt-[78px] md:scroll-mt-[88px]">
       <div className="max-w-[1200px] mx-auto px-6 md:px-10 lg:px-16">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           {/* Left Column: Editorial Portrait & Credibility Anchor */}
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
-            viewport={{ once: true, margin: '-80px' }}
-            className="lg:col-span-5"
-          >
+          <ScrollReveal className="lg:col-span-5">
             <div className="rounded-3xl bg-surface border border-stroke p-6 sm:p-8">
               <div className="min-h-[340px] sm:aspect-square w-full rounded-2xl bg-bg border border-stroke p-6 flex flex-col items-center justify-center text-center relative overflow-hidden">
                 <div className="absolute inset-0 halftone-overlay opacity-25 pointer-events-none" />
@@ -63,16 +57,10 @@ export const About: React.FC = () => {
                 </div>
               </div>
             </div>
-          </motion.div>
+          </ScrollReveal>
 
           {/* Right Column: Narrative & Pillars */}
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.1, ease: [0.25, 0.1, 0.25, 1] }}
-            viewport={{ once: true, margin: '-80px' }}
-            className="lg:col-span-7 flex flex-col items-start"
-          >
+          <ScrollReveal delay={0.12} className="lg:col-span-7 flex flex-col items-start">
             <div className="flex items-center gap-3 mb-4">
               <span className="w-8 h-px bg-stroke" aria-hidden="true" />
               <span className="text-xs text-muted uppercase tracking-[0.3em]">
@@ -146,7 +134,7 @@ export const About: React.FC = () => {
                 <span>Explore Featured Systems</span>
               </a>
             </div>
-          </motion.div>
+          </ScrollReveal>
         </div>
       </div>
     </section>

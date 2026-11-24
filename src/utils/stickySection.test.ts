@@ -75,3 +75,18 @@ test('resolveStickySectionState reveals and tracks Featured Systems, Tools, and 
   assert.equal(contactState.nextSection, null);
   assert.equal(contactState.prevSection?.id, 'stats');
 });
+
+test('resolveStickySectionState activates final Contact section at page bottom', () => {
+  const nearBottomRects = PORTFOLIO_SECTIONS.map((sec, idx) => ({
+    id: sec.id,
+    top: idx === PORTFOLIO_SECTIONS.length - 1 ? 420 : -500 * (PORTFOLIO_SECTIONS.length - idx),
+    height: 480,
+  }));
+
+  const state = resolveStickySectionState(nearBottomRects, 6800, 900, PORTFOLIO_SECTIONS, 280, true);
+  assert.equal(state.visible, true);
+  assert.equal(state.activeSection.id, 'contact');
+  assert.equal(state.sectionProgress, 1);
+  assert.equal(state.prevSection?.id, 'stats');
+  assert.equal(state.nextSection, null);
+});

@@ -12,6 +12,7 @@ import { ArrowRight, ExternalLink, X } from 'lucide-react';
 import { FEATURED_WORK } from '../data/portfolioData.ts';
 import { WORK_IMAGES } from '../data/visualAssets.ts';
 import { PortfolioItem } from '../types/index.ts';
+import { ScrollReveal } from './ScrollReveal.tsx';
 
 const WORK_CATEGORIES = [
   'All',
@@ -66,16 +67,10 @@ export const FeaturedWork: React.FC = () => {
   };
 
   return (
-    <section id="work" className="bg-bg py-16 md:py-24 scroll-mt-20">
+    <section id="work" className="bg-bg py-16 md:py-24 scroll-mt-[78px] md:scroll-mt-[88px]">
       <div className="max-w-[1200px] mx-auto px-6 md:px-10 lg:px-16">
         {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, ease: [0.25, 0.1, 0.25, 1] }}
-          viewport={{ once: true, margin: '-80px' }}
-          className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10"
-        >
+        <ScrollReveal className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
           <div>
             <div className="flex items-center gap-3 mb-4">
               <span className="w-8 h-px bg-stroke" aria-hidden="true" />
@@ -105,9 +100,10 @@ export const FeaturedWork: React.FC = () => {
               <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
             </span>
           </Link>
-        </motion.div>
+        </ScrollReveal>
 
         {/* Category Filter Tabs */}
+        <ScrollReveal delay={0.08}>
         <div
           className="flex flex-wrap items-center gap-2 mb-10"
           role="tablist"
@@ -146,6 +142,7 @@ export const FeaturedWork: React.FC = () => {
             );
           })}
         </div>
+        </ScrollReveal>
 
         {/* Bento Grid with Smooth Layout & Enter/Exit Filter Transitions */}
         <motion.div

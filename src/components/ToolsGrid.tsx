@@ -3,6 +3,7 @@ import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { X } from 'lucide-react';
 import { TOOLS_DATA } from '../data/portfolioData.ts';
 import { ToolItem } from '../types/index.ts';
+import { ScrollReveal } from './ScrollReveal.tsx';
 
 const TOOL_ICONS: Record<string, string> = {
   'Microsoft 365': '/assets/aistudio/Microsoft_365_43de437b.png',
@@ -63,16 +64,10 @@ export const ToolsGrid: React.FC = () => {
   };
 
   return (
-    <section id="tools" className="bg-bg py-16 md:py-24 scroll-mt-20">
+    <section id="tools" className="bg-bg py-16 md:py-24 scroll-mt-[78px] md:scroll-mt-[88px]">
       <div className="max-w-[1200px] mx-auto px-6 md:px-10 lg:px-16">
         {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, ease: [0.25, 0.1, 0.25, 1] }}
-          viewport={{ once: true, margin: '-80px' }}
-          className="mb-10"
-        >
+        <ScrollReveal className="mb-10">
           <div className="flex items-center gap-3 mb-4">
             <span className="w-8 h-px bg-stroke" aria-hidden="true" />
             <span className="text-xs text-muted uppercase tracking-[0.3em]">
@@ -85,9 +80,10 @@ export const ToolsGrid: React.FC = () => {
           <p className="text-sm md:text-base text-muted max-w-xl">
             14 production-grade productivity platforms, enterprise cloud workspaces, AI copilots, and client management ecosystems.
           </p>
-        </motion.div>
+        </ScrollReveal>
 
         {/* Category Filter Tabs (Preserved As-Is) */}
+        <ScrollReveal delay={0.08}>
         <div
           className="flex flex-wrap items-center gap-2 mb-10"
           role="tablist"
@@ -124,6 +120,7 @@ export const ToolsGrid: React.FC = () => {
             );
           })}
         </div>
+        </ScrollReveal>
 
         {/* 14 Tools Responsive Grid with Smooth Filter Transitions */}
         <motion.div
