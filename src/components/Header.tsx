@@ -139,8 +139,12 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCommandPalette }) => {
         }}
         aria-hidden="true"
       />
-      <span className="relative z-10 w-full h-full rounded-full bg-bg flex items-center justify-center font-display italic text-[13px] text-text-primary">
-        AS
+      <span className="relative z-10 w-full h-full rounded-full overflow-hidden bg-bg flex items-center justify-center">
+        <img
+          src="./assets/aistudio/AssistifySteve_Header_Logo_b4eee9f2.jpg"
+          alt="AssistifySteve logo"
+          className="w-full h-full object-cover object-center scale-[1.16] rounded-full"
+        />
       </span>
     </a>
   );
