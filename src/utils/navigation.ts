@@ -13,6 +13,16 @@ export const NAV_ITEMS: NavItem[] = [
   { label: 'Resume', targetId: 'about', index: '05', subtitle: 'Experience & Credentials' },
 ];
 
+export interface ScrollSpyTarget {
+  label: string;
+  targetId: string;
+}
+
+export const SCROLL_SPY_TARGETS: ScrollSpyTarget[] = [
+  ...NAV_ITEMS.map(({ label, targetId }) => ({ label, targetId })),
+  { label: 'Contact', targetId: 'contact' },
+];
+
 export interface SectionPosition {
   label: string;
   top: number;
@@ -20,12 +30,18 @@ export interface SectionPosition {
 
 /**
  * Resolves the active navigation label based on section top offsets relative to
- * the viewport trigger line. Picks the last section whose top has crossed the trigger line.
+ * the viewport trigger line. Picks the deepest section whose top has crossed the
+ * trigger line, and activates 'Contact' when scrolled to the bottom of the page.
  */
 export function resolveActiveNavFromPositions(
   positions: SectionPosition[],
-  triggerLine: number
+  triggerLine: number,
+  isAtPageBottom = false
 ): string {
+  if (isAtPageBottom && positions.some((sec) => sec.label === 'Contact')) {
+    return 'Contact';
+  }
+
   let current = 'Home';
   let bestTop = -Infinity;
 

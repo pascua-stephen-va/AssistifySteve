@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import Hls from 'hls.js';
 
 interface HlsBackgroundVideoProps {
   src: string;
@@ -22,7 +21,6 @@ export const HlsBackgroundVideo: React.FC<HlsBackgroundVideoProps> = ({
     if (!video) return;
 
     setHasError(false);
-    let hls: Hls | null = null;
 
     const handleVideoError = () => {
       setHasError(true);
@@ -35,43 +33,13 @@ export const HlsBackgroundVideo: React.FC<HlsBackgroundVideoProps> = ({
     };
 
     video.addEventListener('error', handleVideoError);
-
-    const isHlsStream = /\.m3u8(\?|$)/i.test(src);
-
-    if (!isHlsStream) {
-      video.src = src;
-      video.addEventListener('loadedmetadata', handleLoadedMetadata);
-      video.play().catch(() => {});
-    } else if (Hls.isSupported()) {
-      hls = new Hls({
-        enableWorker: true,
-        lowLatencyMode: false,
-      });
-      hls.loadSource(src);
-      hls.attachMedia(video);
-      hls.on(Hls.Events.MANIFEST_PARSED, () => {
-        video.play().catch(() => {
-          // Autoplay may be blocked by browser policy; keep silent fallback
-        });
-      });
-      hls.on(Hls.Events.ERROR, (_event, data) => {
-        if (data.fatal) {
-          setHasError(true);
-        }
-      });
-    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-      video.src = src;
-      video.addEventListener('loadedmetadata', handleLoadedMetadata);
-    } else {
-      setHasError(true);
-    }
+    video.addEventListener('loadedmetadata', handleLoadedMetadata);
+    video.src = src;
+    video.play().catch(() => {});
 
     return () => {
       video.removeEventListener('error', handleVideoError);
       video.removeEventListener('loadedmetadata', handleLoadedMetadata);
-      if (hls) {
-        hls.destroy();
-      }
     };
   }, [src]);
 

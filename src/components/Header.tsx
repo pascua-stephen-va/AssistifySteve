@@ -4,6 +4,7 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { Menu, Search, X } from 'lucide-react';
 import {
   NAV_ITEMS,
+  SCROLL_SPY_TARGETS,
   resolveActiveNavFromPositions,
   resolveNavForPathname,
 } from '../utils/navigation';
@@ -29,12 +30,16 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCommandPalette }) => {
 
       if (location.pathname === '/') {
         const triggerLine = window.innerHeight * 0.45;
-        const positions = NAV_ITEMS.map((sec) => {
+        const positions = SCROLL_SPY_TARGETS.map((sec) => {
           const el = document.getElementById(sec.targetId);
           return el ? { label: sec.label, top: el.getBoundingClientRect().top } : null;
         }).filter((pos): pos is { label: string; top: number } => pos !== null);
 
-        setActiveNav(resolveActiveNavFromPositions(positions, triggerLine));
+        const isAtPageBottom =
+          window.scrollY > 120 &&
+          window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 24;
+
+        setActiveNav(resolveActiveNavFromPositions(positions, triggerLine, isAtPageBottom));
       }
     };
 
@@ -196,13 +201,23 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCommandPalette }) => {
           <button
             type="button"
             onClick={() => handleLinkClick('Contact', 'contact')}
+            data-active={activeNav === 'Contact' ? 'true' : 'false'}
+            aria-current={activeNav === 'Contact' ? 'location' : undefined}
             className="group relative inline-flex items-center rounded-full shrink-0 whitespace-nowrap"
           >
             <span
-              className="absolute -inset-[2px] rounded-full accent-gradient-animated opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+              className={`absolute -inset-[2px] rounded-full accent-gradient-animated transition-opacity duration-300 ${
+                activeNav === 'Contact' ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+              }`}
               aria-hidden="true"
             />
-            <span className="relative z-10 inline-flex items-center gap-1 text-sm rounded-full px-4 py-2 bg-surface backdrop-blur-md text-text-primary border border-stroke group-hover:border-transparent transition-colors">
+            <span
+              className={`relative z-10 inline-flex items-center gap-1 text-sm rounded-full px-4 py-2 bg-surface backdrop-blur-md text-text-primary border transition-colors ${
+                activeNav === 'Contact'
+                  ? 'border-transparent'
+                  : 'border-stroke group-hover:border-transparent'
+              }`}
+            >
               <span>Say hi</span>
               <span aria-hidden="true">↗</span>
             </span>
@@ -235,7 +250,13 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCommandPalette }) => {
             <button
               type="button"
               onClick={() => handleLinkClick('Contact', 'contact')}
-              className="inline-flex items-center gap-1 text-xs rounded-full px-3 py-2 bg-bg/70 text-text-primary border border-stroke hover:border-white/25 transition-colors whitespace-nowrap"
+              data-active={activeNav === 'Contact' ? 'true' : 'false'}
+              aria-current={activeNav === 'Contact' ? 'location' : undefined}
+              className={`inline-flex items-center gap-1 text-xs rounded-full px-3 py-2 border transition-colors whitespace-nowrap ${
+                activeNav === 'Contact'
+                  ? 'bg-brand-blue/15 text-brand-light border-brand-blue/60'
+                  : 'bg-bg/70 text-text-primary border-stroke hover:border-white/25'
+              }`}
             >
               <span>Say hi</span>
               <span aria-hidden="true">↗</span>

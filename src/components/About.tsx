@@ -115,6 +115,10 @@ export const About: React.FC = () => {
             <div className="flex flex-wrap items-center gap-4">
               <a
                 href="#recommend"
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById('recommend')?.scrollIntoView({ behavior: 'smooth' });
+                }}
                 className="group relative inline-flex items-center rounded-full"
               >
                 <span
@@ -129,6 +133,10 @@ export const About: React.FC = () => {
 
               <a
                 href="#work"
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById('work')?.scrollIntoView({ behavior: 'smooth' });
+                }}
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-surface border border-stroke text-text-primary hover:border-brand-blue text-sm font-medium transition-colors"
               >
                 <span>Explore Featured Systems</span>

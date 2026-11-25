@@ -15,9 +15,9 @@ export const BRAND_DATA = {
   displayPhone: '+63 992 244 2290',
   social: {
     upwork: 'https://www.upwork.com/freelancers/~010762ea62e477008c',
-    linkedin: 'https://www.linkedin.com/in/assistifysteve',
-    facebook: 'https://www.facebook.com/AssistifySteve',
-    instagram: 'https://www.instagram.com/assistifysteve',
+    linkedin: 'https://www.linkedin.com/in/assistifysteveph',
+    facebook: 'https://www.facebook.com/Assistify.Steve.PH',
+    instagram: 'https://www.instagram.com/assistify.steve.ph/',
   },
 };
 

@@ -21,8 +21,14 @@ import { CommandPalette } from './components/CommandPalette.tsx';
 
 function shouldSkipLoadingInitially(): boolean {
   if (typeof window === 'undefined') return false;
-  const params = new URLSearchParams(window.location.search);
-  return params.get('autostart') === '1';
+  const searchParams = new URLSearchParams(window.location.search);
+  if (searchParams.get('autostart') === '1') return true;
+  const hashQueryIndex = window.location.hash.indexOf('?');
+  if (hashQueryIndex !== -1) {
+    const hashParams = new URLSearchParams(window.location.hash.slice(hashQueryIndex));
+    return hashParams.get('autostart') === '1';
+  }
+  return false;
 }
 
 const LandingPage: React.FC = () => {
