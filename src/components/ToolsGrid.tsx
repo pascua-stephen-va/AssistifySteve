@@ -6,22 +6,22 @@ import { ToolItem } from '../types/index.ts';
 import { ScrollReveal } from './ScrollReveal.tsx';
 
 const TOOL_ICONS: Record<string, string> = {
-  'Microsoft 365': '/assets/aistudio/Microsoft_365_43de437b.png',
-  'Google Workspace': '/assets/aistudio/Google_Workspace_dbd5f067.png',
-  'Canva': '/assets/aistudio/Canva_fe91223d.png',
-  'ChatGPT': '/assets/aistudio/ChatGPT_22b5b73c.png',
-  'Microsoft Copilot': '/assets/aistudio/Microsoft_Copilot_d6871487.png',
-  'Gemini': '/assets/aistudio/Google_Gemini_68161a74.png',
-  'Google Gemini': '/assets/aistudio/Google_Gemini_68161a74.png',
-  'Perplexity': '/assets/aistudio/Perplexity_b7ce5a86.png',
-  'Notion': '/assets/aistudio/Notion_f1137a11.png',
-  'monday.com': '/assets/aistudio/Monday.com_fb6f7eb0.png',
-  'Trello': '/assets/aistudio/Trello_8cddd64a.png',
-  'GoHighLevel': '/assets/aistudio/GoHighLevel_d3c3ad1a.png',
-  'Microsoft Loop': '/assets/aistudio/Microsoft_Loop_9ef76f81.png',
-  'Microsoft Teams': '/assets/aistudio/Microsoft_Teams_ed2675b2.png',
-  'Zoom': '/assets/aistudio/Zoom_Workspace_16a630bb.png',
-  'Zoom Workspace': '/assets/aistudio/Zoom_Workspace_16a630bb.png',
+  'Microsoft 365': './assets/aistudio/Microsoft_365_43de437b.png',
+  'Google Workspace': './assets/aistudio/Google_Workspace_dbd5f067.png',
+  'Canva': './assets/aistudio/Canva_fe91223d.png',
+  'ChatGPT': './assets/aistudio/ChatGPT_22b5b73c.png',
+  'Microsoft Copilot': './assets/aistudio/Microsoft_Copilot_d6871487.png',
+  'Gemini': './assets/aistudio/Google_Gemini_68161a74.png',
+  'Google Gemini': './assets/aistudio/Google_Gemini_68161a74.png',
+  'Perplexity': './assets/aistudio/Perplexity_b7ce5a86.png',
+  'Notion': './assets/aistudio/Notion_f1137a11.png',
+  'monday.com': './assets/aistudio/Monday.com_fb6f7eb0.png',
+  'Trello': './assets/aistudio/Trello_8cddd64a.png',
+  'GoHighLevel': './assets/aistudio/GoHighLevel_d3c3ad1a.png',
+  'Microsoft Loop': './assets/aistudio/Microsoft_Loop_9ef76f81.png',
+  'Microsoft Teams': './assets/aistudio/Microsoft_Teams_ed2675b2.png',
+  'Zoom': './assets/aistudio/Zoom_Workspace_16a630bb.png',
+  'Zoom Workspace': './assets/aistudio/Zoom_Workspace_16a630bb.png',
 };
 
 const CATEGORIES = [

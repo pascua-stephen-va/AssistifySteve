@@ -16,12 +16,12 @@ export const Footer: React.FC = () => {
         <div className="flex flex-col items-center text-center pb-10 border-b border-slate-100 dark:border-slate-800">
           <div className="flex items-center justify-center mb-3">
             <img
-              src="/assets/aistudio/Assistify_Stephen_Logo_Light_372bb444.png"
+              src="./assets/aistudio/Assistify_Stephen_Logo_Light_372bb444.png"
               alt={BRAND_DATA.name}
               className="h-14 sm:h-16 md:h-20 w-auto object-contain dark:hidden drop-shadow-sm"
             />
             <img
-              src="/assets/aistudio/Assistify_Stephen_Logo_Dark.png"
+              src="./assets/aistudio/Assistify_Stephen_Logo_Dark.png"
               alt={BRAND_DATA.name}
               className="h-14 sm:h-16 md:h-20 w-auto object-contain hidden dark:block drop-shadow-sm"
             />

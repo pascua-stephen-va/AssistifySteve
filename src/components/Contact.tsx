@@ -6,7 +6,7 @@ import { BRAND_DATA } from '../data/portfolioData.ts';
 import { HlsBackgroundVideo } from './HlsBackgroundVideo.tsx';
 import { ScrollReveal } from './ScrollReveal.tsx';
 
-const FOOTER_VIDEO_URL = '/assets/aistudio/motionsites-background-1ed54127_db250406.mp4';
+const FOOTER_VIDEO_URL = './assets/aistudio/motionsites-background-1ed54127_db250406.mp4';
 
 const INQUIRY_TOPICS = [
   'Executive VA & Operations',
@@ -194,7 +194,7 @@ export const Contact: React.FC = () => {
                   <div className="flex items-center gap-3">
                     <div className="w-9 h-9 rounded-xl bg-surface border border-stroke p-1.5 flex items-center justify-center shrink-0">
                       <img
-                        src="/assets/aistudio/WhatsApp_24ff4c1a.png"
+                        src="./assets/aistudio/WhatsApp_24ff4c1a.png"
                         alt="WhatsApp icon"
                         referrerPolicy="no-referrer"
                         className="w-full h-full object-contain"
@@ -220,7 +220,7 @@ export const Contact: React.FC = () => {
                   <div className="flex items-center gap-3">
                     <div className="w-9 h-9 rounded-xl bg-surface border border-stroke p-1.5 flex items-center justify-center shrink-0">
                       <img
-                        src="/assets/aistudio/Viber_0c9c7e2c.png"
+                        src="./assets/aistudio/Viber_0c9c7e2c.png"
                         alt="Viber icon"
                         referrerPolicy="no-referrer"
                         className="w-full h-full object-contain"
@@ -381,7 +381,7 @@ export const Contact: React.FC = () => {
                   className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-full bg-bg border border-stroke hover:border-brand-blue text-text-primary text-xs sm:text-sm font-medium transition-colors whitespace-nowrap"
                 >
                   <img
-                    src="/assets/aistudio/WhatsApp_24ff4c1a.png"
+                    src="./assets/aistudio/WhatsApp_24ff4c1a.png"
                     alt=""
                     className="w-4 h-4 object-contain"
                   />
@@ -395,7 +395,7 @@ export const Contact: React.FC = () => {
                   className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-full bg-bg border border-stroke hover:border-brand-blue text-text-primary text-xs sm:text-sm font-medium transition-colors whitespace-nowrap"
                 >
                   <img
-                    src="/assets/aistudio/Viber_0c9c7e2c.png"
+                    src="./assets/aistudio/Viber_0c9c7e2c.png"
                     alt=""
                     className="w-4 h-4 object-contain"
                   />

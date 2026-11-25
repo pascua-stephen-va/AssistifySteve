@@ -19,7 +19,7 @@ export const About: React.FC = () => {
                 >
                   <div className="w-full h-full rounded-full bg-bg overflow-hidden">
                     <img
-                      src="/assets/aistudio/Gemini_Generated_Image_rsaybqrsaybqrsay_-_Copy_69138b59.jpg"
+                      src="./assets/aistudio/Gemini_Generated_Image_rsaybqrsaybqrsay_-_Copy_69138b59.jpg"
                       alt="Stephen Pascua — IT & Administrative Virtual Assistant"
                       className="w-full h-full rounded-full object-cover object-top"
                     />
