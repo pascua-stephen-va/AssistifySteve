@@ -21,19 +21,20 @@ test('recommends IT Support & Systems Management for workspace and permissions q
 test('matches Data Analytics 101 for spreadsheet and data consolidation challenges', () => {
   const result = analyzeWorkflowNeeds('Manual data entry and spreadsheet consolidation');
   assert.equal(result.matchedProject.title, 'Data Analytics 101');
-  assert.ok(result.matchedProject.url.includes('da-101'));
+  assert.equal(result.matchedProject.url, 'https://data-analytics-101.webvi.be');
 });
 
 test('matches TaskPulse for client retention and cadence bottlenecks', () => {
   const result = analyzeWorkflowNeeds('Client onboarding drop-offs and retention cadence tracking');
   assert.equal(result.primaryTier, 'Customer & Client Care');
   assert.equal(result.matchedProject.title, 'TaskPulse');
+  assert.equal(result.matchedProject.url, 'https://taskpulse.webvi.be');
 });
 
 test('matches A Script 2 Scene for prompt engineering and storyboard queries', () => {
   const result = analyzeWorkflowNeeds('Generative AI prompt engineering and storyboard scene planning');
   assert.equal(result.matchedProject.title, 'A Script 2 Scene');
-  assert.ok(result.matchedProject.url.includes('script-to-scene'));
+  assert.equal(result.matchedProject.url, 'https://script-to-scene.webvi.be');
 });
 
 test('gracefully handles empty or vague prompts with sane defaults', () => {

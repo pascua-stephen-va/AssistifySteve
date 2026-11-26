@@ -128,7 +128,7 @@ export function analyzeWorkflowNeeds(input: string): RecommendationResult {
 
   let matchedProject = {
     title: 'TaskScript',
-    url: 'https://task-script.ai.studio',
+    url: 'https://taskscript.webvi.be',
     badge: '02 | AI Workflow & Procedure Launcher',
     reason: 'Standardizes dynamic processes into validated, automated execution checklists.',
   };
@@ -142,7 +142,7 @@ export function analyzeWorkflowNeeds(input: string): RecommendationResult {
   ) {
     matchedProject = {
       title: 'TaskAdjust',
-      url: 'https://task-adjust.ai.studio',
+      url: 'https://taskadjust.webvi.be',
       badge: '01 | Settlement, Refund & Overtime Engine',
       reason: 'Automates complex multi-rule calculation tables, approval thresholds, and audit trails.',
     };
@@ -155,7 +155,7 @@ export function analyzeWorkflowNeeds(input: string): RecommendationResult {
   ) {
     matchedProject = {
       title: 'Data Analytics 101',
-      url: 'https://da-101.ai.studio',
+      url: 'https://data-analytics-101.webvi.be',
       badge: '04 | Interactive Excel & SQL Skills Training Lab',
       reason: 'Transforms fragmented, messy tables into clean schemas, relational joins, and automated queries.',
     };
@@ -168,7 +168,7 @@ export function analyzeWorkflowNeeds(input: string): RecommendationResult {
   ) {
     matchedProject = {
       title: 'TaskPulse',
-      url: 'https://task-pulse.ai.studio',
+      url: 'https://taskpulse.webvi.be',
       badge: '03 | Client Cadence & Retention Engine',
       reason: 'Eliminates client drop-offs through proactive milestone touchpoints and automated SLA monitoring.',
     };
@@ -181,7 +181,7 @@ export function analyzeWorkflowNeeds(input: string): RecommendationResult {
   ) {
     matchedProject = {
       title: 'A Script 2 Scene',
-      url: 'https://script-to-scene.ai.studio',
+      url: 'https://script-to-scene.webvi.be',
       badge: '05 | Prompt Engineering Studio',
       reason: 'Transforms narrative scripts and creative concepts into structured generative AI prompts and visual shot lists.',
     };

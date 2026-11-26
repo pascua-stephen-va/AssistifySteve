@@ -95,7 +95,7 @@ export const FEATURED_WORK: PortfolioItem[] = [
     id: 'task-adjust',
     step: '01',
     title: 'TaskAdjust',
-    url: 'https://task-adjust.ai.studio',
+    url: 'https://taskadjust.webvi.be',
     badge: 'Settlement, Refund & Overtime Engine',
     summary:
       'A specialized enterprise calculation platform designed to automate complex multi-tiered refund allocations, overtime settlement policies, and wage audit trails.',
@@ -114,7 +114,7 @@ export const FEATURED_WORK: PortfolioItem[] = [
     id: 'task-script',
     step: '02',
     title: 'TaskScript',
-    url: 'https://task-script.ai.studio',
+    url: 'https://taskscript.webvi.be',
     badge: 'AI Workflow and Procedure Launcher',
     summary:
       'An intelligent procedural launcher turning complex multi-step standard operating procedures into prompt-guided, foolproof step-by-step checklists.',
@@ -133,7 +133,7 @@ export const FEATURED_WORK: PortfolioItem[] = [
     id: 'task-pulse',
     step: '03',
     title: 'TaskPulse',
-    url: 'https://task-pulse.ai.studio',
+    url: 'https://taskpulse.webvi.be',
     badge: 'Client Cadence & Retention Engine',
     summary:
       'A client relationship cadence engine engineered with cyan-to-violet visual cues to safeguard retention, flag churn risks, and automate recurring touchpoints.',
@@ -152,7 +152,7 @@ export const FEATURED_WORK: PortfolioItem[] = [
     id: 'da-101',
     step: '04',
     title: 'Data Analytics 101',
-    url: 'https://da-101.ai.studio',
+    url: 'https://data-analytics-101.webvi.be',
     badge: 'Interactive Excel & SQL Skills Training Lab',
     summary:
       'An interactive educational laboratory built for professionals and students to master real-world Excel formulas, relational joins, and SQL query fundamentals.',
@@ -171,7 +171,7 @@ export const FEATURED_WORK: PortfolioItem[] = [
     id: 'script-to-scene',
     step: '05',
     title: 'A Script 2 Scene',
-    url: 'https://script-to-scene.ai.studio',
+    url: 'https://script-to-scene.webvi.be',
     badge: 'Prompt Engineering Studio',
     summary:
       'A dedicated prompt engineering studio transforming raw scripts, scenes, and narrative directives into high-fidelity generative AI prompts and cinematic visual shot lists.',
