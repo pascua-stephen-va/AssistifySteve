@@ -9,6 +9,7 @@ export const BRAND_DATA = {
   valueProposition:
     '10+ years of hands-on experience bridging IT Systems & Technical Support, Business Operations, Executive Administrative Assistance, and VA Coaching.',
   email: 'steve@webvi.be',
+  booking: 'https://cal.com/webvibe/assistifysteve',
   whatsapp: 'https://wa.me/639922442290',
   viber: 'viber://chat?number=%2B639922442290',
   phone: 'tel:+639922442290',

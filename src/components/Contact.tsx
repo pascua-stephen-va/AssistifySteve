@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { motion, useReducedMotion, Variants } from 'framer-motion';
-import { Mail, Phone, ArrowUpRight, Copy, Check } from 'lucide-react';
+import { Mail, Phone, ArrowUpRight, Copy, Check, Calendar } from 'lucide-react';
 import { BRAND_DATA } from '../data/portfolioData.ts';
 import { HlsBackgroundVideo } from './HlsBackgroundVideo.tsx';
 import { ScrollReveal } from './ScrollReveal.tsx';
@@ -130,20 +130,39 @@ export const Contact: React.FC = () => {
           <h2 className="text-4xl md:text-6xl font-normal tracking-tight text-text-primary mb-6">
             Let&apos;s build something <span className="font-display italic">reliable.</span>
           </h2>
-          <a
-            href={`mailto:${BRAND_DATA.email}`}
-            className="group relative inline-flex items-center rounded-full"
-          >
-            <span
-              className="absolute -inset-[2px] rounded-full accent-gradient-animated opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-              aria-hidden="true"
-            />
-            <span className="relative z-10 inline-flex items-center gap-2.5 rounded-full bg-surface border border-stroke group-hover:border-transparent px-7 py-3.5 text-sm md:text-base text-text-primary transition-colors">
-              <Mail className="w-4 h-4 text-brand-blue" />
-              <span>{BRAND_DATA.email}</span>
-              <span aria-hidden="true">↗</span>
-            </span>
-          </a>
+          <div className="flex flex-wrap items-center justify-center gap-3.5">
+            <a
+              href={BRAND_DATA.booking}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group relative inline-flex items-center rounded-full"
+            >
+              <span
+                className="absolute -inset-[2px] rounded-full accent-gradient-animated opacity-90 group-hover:opacity-100 transition-opacity duration-300"
+                aria-hidden="true"
+              />
+              <span className="relative z-10 inline-flex items-center gap-2.5 rounded-full bg-text-primary text-bg group-hover:bg-surface group-hover:text-text-primary px-7 py-3.5 text-sm md:text-base font-medium transition-colors">
+                <Calendar className="w-4 h-4" aria-hidden="true" />
+                <span>Book a Discovery Call</span>
+                <span aria-hidden="true">↗</span>
+              </span>
+            </a>
+
+            <a
+              href={`mailto:${BRAND_DATA.email}`}
+              className="group relative inline-flex items-center rounded-full"
+            >
+              <span
+                className="absolute -inset-[2px] rounded-full accent-gradient-animated opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                aria-hidden="true"
+              />
+              <span className="relative z-10 inline-flex items-center gap-2.5 rounded-full bg-surface border border-stroke group-hover:border-transparent px-7 py-3.5 text-sm md:text-base text-text-primary transition-colors">
+                <Mail className="w-4 h-4 text-brand-blue" aria-hidden="true" />
+                <span>{BRAND_DATA.email}</span>
+                <span aria-hidden="true">↗</span>
+              </span>
+            </a>
+          </div>
         </ScrollReveal>
 
         {/* Interactive Contact Grid (All Original Channels & Inquiry Composer Preserved) */}
@@ -159,6 +178,29 @@ export const Contact: React.FC = () => {
               </p>
 
               <div className="space-y-3">
+                {/* Calendar Booking */}
+                <a
+                  href={BRAND_DATA.booking}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-between p-3.5 rounded-2xl bg-bg border border-brand-blue/40 hover:border-brand-blue transition-colors group"
+                >
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="w-9 h-9 rounded-xl bg-brand-blue/15 border border-brand-blue/35 flex items-center justify-center text-brand-light shrink-0">
+                      <Calendar className="w-4 h-4" aria-hidden="true" />
+                    </div>
+                    <div className="min-w-0">
+                      <span className="block text-[11px] uppercase tracking-[0.15em] text-brand-blue">
+                        Book a Call
+                      </span>
+                      <span className="block text-sm text-text-primary group-hover:text-brand-light transition-colors truncate">
+                        Schedule on Cal.com
+                      </span>
+                    </div>
+                  </div>
+                  <ArrowUpRight className="w-4 h-4 text-brand-light group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform shrink-0" />
+                </a>
+
                 {/* Email + Copy */}
                 <div className="flex items-center justify-between p-3.5 rounded-2xl bg-bg border border-stroke">
                   <a
